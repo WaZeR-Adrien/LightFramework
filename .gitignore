@@ -1,0 +1,4 @@
+vendor/
+composer.lock
+kernel/Config.php
+.idea/

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {# Properties #}
+    <title>{{ block('titlePage') }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ block('titlePage') }} | {{ g_site_name }}" />
+    <meta property="og:url" content="{{ g_url }}" />
+    <meta property="og:site_name" content="{{ g_site_name }}" />
+    <meta property="og:description" content="{{ block('metaDesc') }}" />
+    <meta property="og:image" content="IMAGE OF SITE" />
+    <meta name="description" content="{{ block('metaDesc') }}" />
+
+    {# CSS #}
+    <link rel="stylesheet" href="{{ g_css }}style.css">
+    <link rel="stylesheet" href="{{ g_css }}bootstrap.css">
+    <link rel="stylesheet" href="{{ g_css }}font-awesome.min.css">
+    <link rel="stylesheet" href="{{ g_css }}ripple.min.css">
+    <link rel="stylesheet" href="{{ g_css }}toastr.min.css">
+
+    {# JS #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" href="{{ g_js }}bootstrap.js"></script>
+    <script type="text/javascript" href="{{ g_js }}toastr.min.js"></script>
+
+</head>
+<body>
+<div id="content">
+    {{ block('body') }}
+</div>
+</body>
+</html>
