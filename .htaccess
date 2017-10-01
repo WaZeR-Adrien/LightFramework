@@ -1,0 +1,14 @@
+Options All -Indexes
+Options +FollowSymlinks
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+ErrorDocument 404 /?b=error&p=error404
+
+# MAIN
+RewriteRule	^home/?$	?b=home&p=home	[L]
+RewriteRule	^example/?$	?b=example&p=example	[L]
+RewriteRule	^member/profile/?$	?b=account&p=profile	[L]
+
+# API
+RewriteRule ^api/user/?$ ?b=account&p=user [L]
+RewriteRule ^api/user/id/([0-9]+)/?$ ?b=account&p=user&id=$1 [L]

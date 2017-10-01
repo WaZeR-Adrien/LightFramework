@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {# Properties #}
+    <title>{{ block('titlePage') }} | {{ siteName }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ block('titlePage') }} | {{ siteName }}" />
+    <meta property="og:url" content="URL SITE" />
+    <meta property="og:site_name" content="{{ siteName }}" />
+    <meta property="og:description" content="{% block metaPage %} {% endblock %}" />
+
+    {# CSS #}
+    <link rel="stylesheet" href="{{ css }}bootstrap.min.css">
+    <link rel="stylesheet" href="{{ css }}font-awesome.min.css">
+    <link rel="stylesheet" href="{{ css }}toastr.min.css">
+    <link rel="stylesheet" href="{{ css }}ripple.min.css">
+    <link rel="stylesheet" href="{{ css }}style.css">
+    {% block pathCss %} {% endblock %}
+
+    {# SCRIPTS #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ js }}tether.min.js"></script>
+    <script type="text/javascript" src="{{ js }}bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ js }}toastr.min.js"></script>
+    <script type="text/javascript" src="{{ js }}header.js"></script>
+    {% block pathJs %} {% endblock %}
+</head>
+<body>
+    <div class="page-title-bar" img="{% block bg %} {% endblock %}">
+        <div id="nav-top">
+            {% include '/layouts/menu.html.twig' %}
+        </div>
+        <div class="title">
+            <h1>{{ block('titlePage') }}</h1>
+        </div>
+    </div>
+    <div id="content">
+        {% block body %} {% endblock %}
+    </div>
+</body>
+<footer>
+    {% block footer %} {% endblock %}
+</footer>
+</html>

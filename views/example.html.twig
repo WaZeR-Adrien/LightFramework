@@ -1,0 +1,10 @@
+{% extends 'layouts/main.html.twig' %}
+{% block titlePage %} example title {% endblock %}
+{% block metaPage %} example meta desc {% endblock %}
+{% block bg %}my-background.jpg{% endblock %}
+
+{% block body %}
+    {% for e in example %}
+        <h1>{{ e.name }}</h1>
+    {% endfor %}
+{% endblock %}
