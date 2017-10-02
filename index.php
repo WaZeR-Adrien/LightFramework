@@ -10,8 +10,11 @@ $router->get('/', function () {
     echo 'Home';
 }, 'home');
 
-$router->get('/example/:slug-:id', "Example#show", 'example.show')
+$router->get('/example/:slug-:id', "Example#show", "example.show")
     ->with('id', '[0-9]+')
     ->with('slug', '[a-z\-0-9]+');
+
+$router->post('/example/update', "Example#update", "example.update");
+$router->post('/example/add', "Example#add", "example.add");
 
 $router->run();
