@@ -10,14 +10,14 @@ class Database
     {
         $class = get_called_class();
         if (is_null($id)) {
-            $vars = $class::getColumns($class::_getTable());
+            $vars = $class::getColumns($class::getTable());
             foreach ($vars as $v) {
                 $key = $v['Field'];
                 $this->$key = $v['Default'];
             }
         }
         else {
-            $query = 'SELECT * FROM `' . $class::_getTable() . '` WHERE id' . ' = ?';
+            $query = 'SELECT * FROM `' . $class::getTable() . '` WHERE id' . ' = ?';
             $stmt = self::_getPdo()->prepare($query);
             $stmt->execute([$id]);
             $attrs = $stmt->fetchAll(\PDO::FETCH_OBJ);
@@ -56,7 +56,7 @@ class Database
      * Get table which called.
      * @return string
      */
-    public static function _getTable() {
+    public static function getTable() {
         $class = get_called_class();
         if (isset($class::$_table)) {
             return $class::$_table;
@@ -72,7 +72,7 @@ class Database
      */
     public static function getColumns($table = null) {
         if (is_null($table)) {
-            $table = self::_getTable();
+            $table = self::getTable();
         }
         $query = 'SHOW COLUMNS FROM `' . $table . '`';
         try {
@@ -84,13 +84,30 @@ class Database
     }
 
     /**
+     * Get value of another table with the name of the 'class_id'
+     * @param $name : class
+     * @return object
+     */
+    public function __get($name) {
+        if ($name == 'id') { return null; }
+
+        $fullName = explode('\\', $name);
+        $field = end($fullName) . '_id';
+        $fullName = array_map(function ($v){ return ucfirst($v); }, $fullName);
+        $class = ucfirst(implode('\\', $fullName));
+        $class = 'Models\\' .$class;
+
+        return new $class($this->$field);
+    }
+
+    /**
      * Get with SELECT query and clause WHERE
      * @param $where
      * @param array $params
      * @return array
      */
     public static function where($where, $params = []) {
-        $query = 'SELECT * FROM `' . self::_getTable() . '` WHERE ' . $where;
+        $query = 'SELECT * FROM `' . self::getTable() . '` WHERE ' . $where;
         return self::query($query, $params);
     }
 
@@ -136,7 +153,7 @@ class Database
      */
     public static function getAll()
     {
-        return self::query('SELECT * FROM '. self::_getTable());
+        return self::query('SELECT * FROM '. self::getTable());
     }
 
     /**
@@ -154,7 +171,7 @@ class Database
         $keys = implode(',', $keys);
 
         return self::exec(
-            'INSERT INTO '. self::_getTable() .'(' . $keys . ') VALUES (?'. str_repeat(', ?', count($values) - 1) .')',
+            'INSERT INTO '. self::getTable() .'(' . $keys . ') VALUES (?'. str_repeat(', ?', count($values) - 1) .')',
             $values
         );
     }
@@ -177,7 +194,7 @@ class Database
         var_dump($values);
 
         return self::exec(
-            'UPDATE '. self::_getTable() .' SET '. implode(' = ?, ', $keys) . ' = ?' . ' WHERE id = ?',
+            'UPDATE '. self::getTable() .' SET '. implode(' = ?, ', $keys) . ' = ?' . ' WHERE id = ?',
             $values
         );
     }
@@ -187,7 +204,7 @@ class Database
      * @return mixed
      */
     public function delete() {
-        $res = $this->exec('DELETE FROM ' . self::_getTable() . ' WHERE `id`' . ' = ?', [$this->id]);
+        $res = $this->exec('DELETE FROM ' . self::getTable() . ' WHERE `id`' . ' = ?', [$this->id]);
         unset($this);
         return $res;
     }

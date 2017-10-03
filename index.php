@@ -17,8 +17,4 @@ $router->get('/example/:slug-:id', "Example#show", "example.show")
 $router->post('/example/update', "Example#update", "example.update");
 $router->post('/example/add', "Example#add", "example.add");
 
-$router->get('/test', function () {
-
-});
-
 $router->run();
