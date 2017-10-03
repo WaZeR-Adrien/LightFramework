@@ -74,7 +74,7 @@ class Database
         if (is_null($table)) {
             $table = self::_getTable();
         }
-        $query = 'show columns from `' . $table . '`';
+        $query = 'SHOW COLUMNS FROM `' . $table . '`';
         try {
             return Connection::query($query)->fetchAll(\PDO::FETCH_ASSOC);
         } catch (Exception $e) {
@@ -118,6 +118,25 @@ class Database
             $p[] = $v;
         }
         return self::where(implode(' and ', $where), $p);
+    }
+
+    /**
+     * Get first value with by values
+     * @param $params
+     * @return array || null
+     */
+    public static function findOne($params) {
+        $array = self::find($params);
+        return isset($array[0]) ? $array[0] : null;
+    }
+
+    /**
+     * Get all datas from table
+     * @return array
+     */
+    public static function getAll()
+    {
+        return self::query('SELECT * FROM '. self::_getTable());
     }
 
     /**
@@ -171,16 +190,6 @@ class Database
         $res = $this->exec('DELETE FROM ' . self::_getTable() . ' WHERE `id`' . ' = ?', [$this->id]);
         unset($this);
         return $res;
-    }
-
-    /**
-     * Get first value with by values
-     * @param $params
-     * @return array || null
-     */
-    public static function findOne($params) {
-        $array = self::find($params);
-        return isset($array[0]) ? $array[0] : null;
     }
 
     /**

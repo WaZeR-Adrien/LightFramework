@@ -1,5 +1,5 @@
 <?php
-namespace HeroesTeam\Controllers\Tools;
+namespace Kernel;
 
 class File
 {
@@ -69,44 +69,5 @@ class File
 
             return $error;
         }
-    }
-
-    public function verif()
-    {
-        $handle = fopen(APP_PATH . $this->_dir . $this->fileNameHash, 'r');
-
-        if ($handle) {
-
-            while (!feof($handle)) {
-
-                $buffer = fgets($handle);
-
-                switch (true) {
-                    case strstr($buffer, '<'):
-                        return false;
-                        break;
-
-                    case strstr($buffer, '>'):
-                        return false;
-                        break;
-
-                    case strstr($buffer, ';'):
-                        return false;
-                        break;
-
-                    case strstr($buffer, '&'):
-                        return false;
-                        break;
-
-                    case strstr($buffer, '?'):
-                        return false;
-                        break;
-                }
-            }
-
-            fclose($handle);
-        }
-
-        return true;
     }
 }
