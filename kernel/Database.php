@@ -143,12 +143,9 @@ class Database
     /**
      * Update row
      * Values and key with $this
-     * Where clause with $where and $params
-     * @param $where
-     * @param $params
      * @return int
      */
-    public function update($where, $params)
+    public function update()
     {
         $keys = [];
         $values = [];
@@ -156,10 +153,12 @@ class Database
             $keys[] = '`' . $k . '`';
             $values[] = $v;
         }
-        foreach ($params as $k => $v) { $values[] = $v; }
+        $values[] = $this->id;
+
+        var_dump($values);
 
         return self::exec(
-            'UPDATE '. self::_getTable() .' SET '. implode(' = ?, ', $keys) . ' = ?' . ' WHERE '. $where,
+            'UPDATE '. self::_getTable() .' SET '. implode(' = ?, ', $keys) . ' = ?' . ' WHERE id = ?',
             $values
         );
     }

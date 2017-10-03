@@ -1,6 +1,7 @@
 <?php
 namespace Controllers;
 use Kernel\Twig;
+use Models\Testt;
 
 class Example
 {
@@ -17,7 +18,7 @@ class Example
         $example->field1 = 'lorem ipsum';
         $example->field2 = 'lorem ipsum';
         $example->field3 = 'lorem ipsum';
-        $example->update('id = ?', [$_POST['id']]);
+        $example->update();
     }
 
     public static function add()
