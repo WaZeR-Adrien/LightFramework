@@ -4,6 +4,7 @@ BASE ON MVC [v2]
 ## You need :
 - Edit kernel/Config-sample.php by your own account database
 - Rename kernel/Config-sample.php by kernel/Config.php
+- Execute : composer install
 - Enjoy :)
 
 ### App :
