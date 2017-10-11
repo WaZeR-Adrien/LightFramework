@@ -1,2 +1,2 @@
-# configDevWeb
-Config for the development (base of website MVC)
+# LightFramework
+My LightFramework is a framework for the web development (base of website MVC)
