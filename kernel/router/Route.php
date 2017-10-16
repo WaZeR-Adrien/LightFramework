@@ -7,16 +7,20 @@ class Route
     private $_callable;
     private $_matches = [];
     private $_params = [];
+    private $_needLogin;
+
 
     /**
      * Route constructor.
      * @param $path
      * @param $callable
+     * @param $needLogin
      */
-    public function __construct($path, $callable)
+    public function __construct($path, $callable, $needLogin)
     {
         $this->_path = trim($path, '/');
         $this->_callable = $callable;
+        $this->_needLogin = $needLogin;
     }
 
     /**
@@ -66,6 +70,8 @@ class Route
      */
     public function call()
     {
+        $this->needLogin();
+
         if (is_string($this->_callable)) {
             $params = explode('#', $this->_callable);
             $controller = "Controllers\\$params[0]";
@@ -90,4 +96,18 @@ class Route
 
         return $path;
     }
+
+    /**
+     * Redirect if user doesn't login or login
+     */
+    public function needLogin()
+    {
+        if (!empty($_SESSION['id']) && $this->_needLogin === false) {
+            header('location: /espace-membre');
+        }
+        elseif (empty($_SESSION['id']) && $this->_needLogin === true) {
+            header('location: /connexion');
+        }
+    }
+
 }

@@ -1,5 +1,5 @@
-# Config for web development
-BASE ON MVC [v2]
+# Lightwork
+Light MVC framework [v2]
 
 ## You need :
 - Edit kernel/Config-sample.php by your own account database

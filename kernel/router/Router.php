@@ -1,5 +1,6 @@
 <?php
 namespace Kernel\Router;
+use Controllers\Error\Error404;
 
 class Router
 {
@@ -20,34 +21,37 @@ class Router
      * @param $path
      * @param $callable
      * @param null $name
+     * @param null $needLogin
      * @return Route
      */
-    public function get($path, $callable, $name = null)
+    public function get($path, $callable, $name = null, $needLogin = null)
     {
-        return $this->add($path, $callable, $name, 'GET');
+        return $this->add($path, $callable, $name, $needLogin, 'GET');
     }
 
     /**
      * @param $path
      * @param $callable
-     * @param null $name
+     * @param null $name$name
+     * @param null $needLogin
      * @return Route
      */
-    public function post($path, $callable, $name  = null)
+    public function post($path, $callable, $name  = null, $needLogin = null)
     {
-        return $this->add($path, $callable, $name, 'POST');
+        return $this->add($path, $callable, $name, $needLogin, 'POST');
     }
 
     /**
      * @param $path
      * @param $callable
      * @param $name
+     * @param $needLogin
      * @param $method
      * @return Route
      */
-    private function add($path, $callable, $name, $method)
+    private function add($path, $callable, $name, $needLogin, $method)
     {
-        $route = new Route($path, $callable);
+        $route = new Route($path, $callable, $needLogin);
         $this->_routes[$method][] = $route;
         if (is_string($callable) && is_null($name)) {
             $name = $callable;
@@ -68,13 +72,18 @@ class Router
             throw new RouterException('REQUEST_METHOD doesn\'t exist');
         }
 
-        foreach ($this->_routes[$_SERVER['REQUEST_METHOD']] as $route) {
-            if ($route->match($this->_url)) {
-                return $route->call();
+        try {
+            foreach ($this->_routes[$_SERVER['REQUEST_METHOD']] as $route) {
+                if ($route->match($this->_url)) {
+                    return $route->call();
+                }
             }
+            throw new RouterException('No matching routes', 1);
+        }
+        catch (RouterException $e) {
+            if ($e->getCode() === 1) { Error404::index(); }
         }
 
-        throw new RouterException('No matching routes');
     }
 
     /**

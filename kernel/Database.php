@@ -191,8 +191,6 @@ class Database
         }
         $values[] = $this->id;
 
-        var_dump($values);
-
         return self::exec(
             'UPDATE '. self::getTable() .' SET '. implode(' = ?, ', $keys) . ' = ?' . ' WHERE id = ?',
             $values

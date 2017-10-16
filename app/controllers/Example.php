@@ -3,15 +3,23 @@ namespace Controllers;
 use Kernel\Twig;
 use Models\Testt;
 
-class Example
+class Example extends Controller
 {
+    /**
+     * Show view with datas sended to twig
+     * @param $slug
+     * @param $id
+     */
     public static function show($slug, $id)
     {
-        $twig = Twig::init();
+        self::$_datas = ['slug' => $slug, 'id' => $id];
 
-        echo $twig->render('example.html.twig', ['slug' => $slug, 'id' => $id]);
+        self::_view('example.html.twig');
     }
 
+    /**
+     * Update values to Database
+     */
     public static function update()
     {
         $example = new \Models\Example($_POST['id']);
@@ -21,6 +29,9 @@ class Example
         $example->update();
     }
 
+    /**
+     * Add new row to Database
+     */
     public static function add()
     {
         $example = new \Models\Example();
