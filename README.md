@@ -1,2 +1,2 @@
-# LightFramework
-My LightFramework is a framework for the web development (base of website MVC)
+# Lightwork
+Lightwork is a light framework that i created for the web development (base of website MVC)
