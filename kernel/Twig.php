@@ -23,7 +23,7 @@ class Twig
 
     public static function addGlobal($twig)
     {
-        $twig->addGlobal('g_site_name', 'Heroes Team');
+        $twig->addGlobal('g_site_name', 'SITE_NAME');
         $twig->addGlobal('g_url', 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
         $twig->addGlobal('g_css', '/css/');
         $twig->addGlobal('g_js', '/js/');
