@@ -74,13 +74,13 @@ class Database
         if (is_null($table)) {
             $table = self::getTable();
         }
-        $query = 'SHOW COLUMNS FROM `' . $table . '`';
-        try {            
+        $statement = 'SHOW COLUMNS FROM `' . $table . '`';
+        try {
             $q = self::_getPdo()->prepare($statement);
             $q->execute();
             return $q->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            print($query);
+        } catch (\Exception $e) {
+            print($statement);
             exit($e->getMessage());
         }
     }
