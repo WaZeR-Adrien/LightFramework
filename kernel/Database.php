@@ -75,8 +75,10 @@ class Database
             $table = self::getTable();
         }
         $query = 'SHOW COLUMNS FROM `' . $table . '`';
-        try {
-            return Connection::query($query)->fetchAll(\PDO::FETCH_ASSOC);
+        try {            
+            $q = self::_getPdo()->prepare($statement);
+            $q->execute();
+            return $q->fetchAll(\PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             print($query);
             exit($e->getMessage());
