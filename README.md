@@ -1,5 +1,5 @@
 # Config for web development
-BASE ON MVC [v2]
+BASE ON MVC [v1]
 
 ## For use :
 - Edit config-example.php by your own account
