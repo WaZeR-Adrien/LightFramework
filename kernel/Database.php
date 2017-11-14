@@ -106,10 +106,12 @@ class Database
      * Get with SELECT query and clause WHERE
      * @param $where
      * @param array $params
+     * @param null $order
+     * @param null $limit
      * @return array
      */
-    public static function where($where, $params = []) {
-        $query = 'SELECT * FROM `' . self::getTable() . '` WHERE ' . $where;
+    public static function where($where, $params = [], $order = null, $limit = null) {
+        $query = 'SELECT * FROM `' . self::getTable() . '` WHERE ' . $where . self::order($order) . self::limit($limit);
         return self::query($query, $params);
     }
 
@@ -127,16 +129,18 @@ class Database
     /**
      * Get by values
      * @param $params
+     * @param null $order
+     * @param null $limit
      * @return array
      */
-    public static function find($params) {
+    public static function find($params, $order = null, $limit = null) {
         $where = [];
         $p = [];
         foreach ($params as $k => $v) {
             $where[] = '`' . $k . '`=?';
             $p[] = $v;
         }
-        return self::where(implode(' and ', $where), $p);
+        return self::where(implode(' and ', $where), $p, $order, $limit);
     }
 
     /**
@@ -151,11 +155,47 @@ class Database
 
     /**
      * Get all datas from table
+     * @param null $order
+     * @param null $limit
      * @return array
      */
-    public static function getAll()
+    public static function getAll($order = null, $limit = null)
     {
-        return self::query('SELECT * FROM '. self::getTable());
+        return self::query('SELECT * FROM '. self::getTable() . self::order($order) . self::limit($limit));
+    }
+
+    /**
+     * Set string ORDER BY...
+     * @param $order
+     * @return string
+     */
+    public static function order($order) {
+        return (null !== $order) ? (' ORDER BY ' . $order) : '';
+    }
+
+    /**
+     * Set string LIMIT...
+     * @param $limit
+     * @return string
+     */
+    public static function limit($limit) {
+        return (null !== $limit) ? (' LIMIT ' . $limit) : '';
+    }
+
+    /**
+     * @param string $where
+     * @param array $params
+     * @return int
+     */
+    public static function count($where = null, $params = [])
+    {
+        if (null !== $where) { $where = ' WHERE '. $where; }
+        else { $where = ''; }
+
+        return (int) self::query(
+            'SELECT count(*) as nb FROM '. self::getTable() . $where,
+            $params
+        )[0]->nb;
     }
 
     /**
@@ -234,7 +274,7 @@ class Database
      * @param $params array
      * @return int
      */
-    public static function exec($statement,$params){
+    public static function exec($statement, $params){
         $q = self::_getPdo()->prepare($statement);
         return $q->execute($params);
     }
