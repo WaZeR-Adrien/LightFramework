@@ -3,7 +3,7 @@ namespace Kernel\Tools;
 
 class Alert
 {
-    private $_code;
+    public $code;
 
     /**
      * Alert constructor.
@@ -15,9 +15,9 @@ class Alert
      */
     public function __construct($code, $type)
     {
-        if ($type === 'suc') { $this->_code = "suc_$code"; }
-        elseif ($type === 'err') { $this->_code = "err_$code"; }
-        elseif ($type === 'warn') { $this->_code = "warn_$code"; }
+        if ($type === 'suc') { $this->code = "suc_$code"; }
+        elseif ($type === 'err') { $this->code = "err_$code"; }
+        elseif ($type === 'warn') { $this->code = "warn_$code"; }
     }
 
     /**
@@ -25,7 +25,7 @@ class Alert
      */
     public function setAlert()
     {
-        $_SESSION['alerts'][$this->_code] = true;
+        $_SESSION['alerts'][$this->code] = true;
     }
 
     /**
@@ -33,6 +33,6 @@ class Alert
      */
     public function remove()
     {
-        unset($_SESSION['alerts'][$this->_code]);
+        unset($_SESSION['alerts'][$this->code]);
     }
 }
