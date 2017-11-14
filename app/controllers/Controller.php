@@ -1,11 +1,15 @@
 <?php
 namespace Controllers;
+use Kernel\Config;
 use Kernel\Tools\Alert;
 use Kernel\Twig;
+use Models\Recruitment\Classe;
+use Models\Recruitment\Hero;
+use Models\Recruitment\Rank;
 
 class Controller
 {
-    protected static $_datas = []; // Datas sended to Twig
+    protected static $_datas = [];
     protected static $_alert = [];
 
     /**
@@ -16,9 +20,10 @@ class Controller
     {
         $twig = Twig::init();
 
-        self::_checkAlerts();
+        self::_removeAlerts();
 
         echo $twig->render($view, self::$_datas);
+        exit();
     }
 
     /**
@@ -50,16 +55,11 @@ class Controller
     }
 
     /**
-     * Check if there are alert in SESSION
-     * Send alert to datas for twig
-     * And after, remove this alert in SESSION
+     * Remove alerts SESSION
      */
-    protected static function _checkAlerts()
+    protected static function _removeAlerts()
     {
         if (!empty($_SESSION['alerts'])) {
-            foreach ($_SESSION['alerts'] as $k => $v) {
-                self::$_datas['alerts'][$k] = $v;
-            }
             unset($_SESSION['alerts']);
         }
     }
@@ -67,5 +67,19 @@ class Controller
     protected static function _redirect($url)
     {
         header('location: '. $url);
+        exit();
+    }
+
+    protected static function _createToken()
+    {
+        $token = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        return substr(str_shuffle(str_repeat($token, 50)), 0, 50);
+    }
+
+    protected static function _toJson($var)
+    {
+        header('Content-Type:application/json');
+        echo json_encode($var);
+        exit();
     }
 }
