@@ -104,9 +104,11 @@ class Route
     {
         if (!empty($_SESSION['id']) && $this->_needLogin === false) {
             header('location: /espace-membre');
+            exit();
         }
         elseif (empty($_SESSION['id']) && $this->_needLogin === true) {
             header('location: /connexion');
+            exit();
         }
     }
 
