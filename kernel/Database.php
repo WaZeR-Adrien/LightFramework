@@ -30,7 +30,7 @@ class Database
     }
 
     /**
-     * Set and get PDO connection
+     * Set and get PDO
      * @return PDO
      */
     private static function _getPdo(){
@@ -154,6 +154,16 @@ class Database
     }
 
     /**
+     * Get first value by id
+     * @param $id
+     * @return array
+     */
+    public static function getById($id)
+    {
+        return self::findOne(['id' => $id]);
+    }
+
+    /**
      * Get all datas from table
      * @param null $order
      * @param null $limit
@@ -244,7 +254,20 @@ class Database
      * @return mixed
      */
     public function delete() {
-        $res = $this->exec('DELETE FROM ' . self::getTable() . ' WHERE `id`' . ' = ?', [$this->id]);
+        $params = [];
+        $values = [];
+        foreach ($this as $k => $v) {
+            if (empty($this->id)) {
+                if (null != $v) {
+                    $params[] = $k;
+                }
+            }
+            else { $params = ['id']; }
+            if (null != $v) {
+                $values[] = $v;
+            }
+        }
+        $res = $this->exec('DELETE FROM ' . self::getTable() . ' WHERE ' . implode(' AND = ?, ', $params) . ' = ?', $values);
         unset($this);
         return $res;
     }
