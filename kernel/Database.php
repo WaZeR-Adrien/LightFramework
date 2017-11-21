@@ -256,16 +256,17 @@ class Database
     public function delete() {
         $params = [];
         $values = [];
-        foreach ($this as $k => $v) {
-            if (empty($this->id)) {
+        if (empty($this->id)) {
+            foreach ($this as $k => $v) {
                 if (null != $v) {
                     $params[] = $k;
+                    $values[] = $v;
                 }
             }
-            else { $params = ['id']; }
-            if (null != $v) {
-                $values[] = $v;
-            }
+        }
+        else {
+            $params = ['id'];
+            $values[] = $this->id;
         }
         $res = $this->exec('DELETE FROM ' . self::getTable() . ' WHERE ' . implode(' AND = ?, ', $params) . ' = ?', $values);
         unset($this);
