@@ -127,6 +127,18 @@ class Database
     }
 
     /**
+     * Get last value with by values
+     * @param $where
+     * @param $params
+     * @return array | null
+     */
+    public static function whereLast($where, $params) {
+        $array = self::where($where, $params);
+        $lastKey = count($array) - 1;
+        return isset($array[$lastKey]) ? $array[$lastKey] : null;
+    }
+
+    /**
      * Get by values
      * @param $params
      * @param null $order
@@ -151,6 +163,17 @@ class Database
     public static function findOne($params) {
         $array = self::find($params);
         return isset($array[0]) ? $array[0] : null;
+    }
+
+    /**
+     * Get last value with by values
+     * @param $params
+     * @return array || null
+     */
+    public static function findLast($params) {
+        $array = self::find($params);
+        $lastKey = count($array) - 1;
+        return isset($array[$lastKey]) ? $array[$lastKey] : null;
     }
 
     /**
@@ -268,7 +291,7 @@ class Database
             $params = ['id'];
             $values[] = $this->id;
         }
-        $res = $this->exec('DELETE FROM ' . self::getTable() . ' WHERE ' . implode(' AND = ?, ', $params) . ' = ?', $values);
+        $res = $this->exec('DELETE FROM ' . self::getTable() . ' WHERE ' . implode(' = ? AND ', $params) . ' = ?', $values);
         unset($this);
         return $res;
     }
