@@ -63,6 +63,33 @@ class Controller
             unset($_SESSION['alerts']);
         }
     }
+    
+    /**
+     * Remove attributes on array
+     * @param array $array
+     * @param array $attrs
+     * @param string $type
+     * @return array
+     */
+    protected static function _removeAttrs($array = [], $attrs = [], $type = 'obj')
+    {
+        foreach ($array as $k => $v) {
+            switch ($type) {
+                case 'obj':
+                    foreach ($attrs as $attr) {
+                        unset($v->$attr);
+                    }
+                    break;
+
+                case 'array':
+                    foreach ($attrs as $attr) {
+                        unset($v[$attr]);
+                    }
+                    break;
+            }
+        }
+        return $array;
+    }
 
     protected static function _redirect($url)
     {
