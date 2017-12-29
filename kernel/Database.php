@@ -297,6 +297,29 @@ class Database
     }
 
     /**
+     * Get info with foreign key
+     * @param $handle
+     * @param array $replacesFk
+     */
+    public static function infosFk(&$handle, $replacesFk = [])
+    {
+        foreach ($handle as $k => $v) {
+            if (strpos($k, '_id')) {
+                if (array_key_exists($k, $replacesFk)) {
+                    $attr = $replacesFk[$k];
+                }
+                else {
+                    $attr = substr($k, 0, strlen($k) - 3);
+                }
+                $class = implode(array_map('ucfirst', explode('_', $attr)));
+                $class = "\Models\\{$class}";
+                $handle->$attr = $class::findOne(['id' => $v]);
+                unset($handle->$k);
+            }
+        }
+    }
+
+    /**
      * @return int
      */
     public static function getLastId()
