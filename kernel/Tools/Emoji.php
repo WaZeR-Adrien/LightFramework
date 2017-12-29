@@ -15,7 +15,7 @@ class Emoji
 
             if (in_array($value, self::$_emojis)) {
                 $keyEmoji = array_search($value, self::$_emojis);
-                $tab[$k] = str_replace( $value, '<img class="emoji" src="../img/emojis/'. self::$_img[$keyEmoji] .'.png" alt="'. $value .'">', $value );
+                $tab[$k] = str_replace( $value, '<img class="emoji" src="/img/emojis/'. self::$_img[$keyEmoji] .'.png" alt="'. $value .'">', $value );
             }
 
         }
