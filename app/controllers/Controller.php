@@ -9,7 +9,7 @@ class Controller
     protected static $_datas = [];
     protected static $_alert = [];
     protected static $_days = [
-        'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'
+        'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'
     ];
 
     /**
