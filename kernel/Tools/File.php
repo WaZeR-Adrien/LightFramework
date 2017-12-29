@@ -1,6 +1,8 @@
 <?php
 namespace Kernel\Tools;
 
+use Kernel\Config;
+
 class File
 {
     private $_fileName;
@@ -35,7 +37,7 @@ class File
         $fileName = strtr($file,
             'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ',
             'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
-        $fileName = Reg::pregReplace($fileName,'file');
+        $fileName = preg_replace('/[^.a-z0-9]+/i', '-', $fileName);
         $fileName = explode('.',$fileName)[0];
 
         return $fileName;
@@ -54,20 +56,11 @@ class File
         if (empty($this->_error))
         {
             $this->fileNameHash = hash('sha1', microtime($this->_fileName)) . $this->_fileExtension;
-            move_uploaded_file($this->_fileTmp, APP_PATH . $this->_dir . $this->fileNameHash);
-            chmod(APP_PATH . $this->_dir . $this->fileNameHash, 0755);
+            move_uploaded_file($this->_fileTmp, $_SERVER['DOCUMENT_ROOT'] . '/' . $this->_dir . $this->fileNameHash);
+            chmod($_SERVER['DOCUMENT_ROOT'] . '/' . $this->_dir . $this->fileNameHash, 0755);
 
             return $this->fileNameHash;
         }
-        else
-        {
-            $error = [];
-            foreach ($this->_error as $k => $v)
-            {
-                $error[] = $k;
-            }
-
-            return $error;
-        }
+        else { return ['error' => $this->_error]; }
     }
 }
