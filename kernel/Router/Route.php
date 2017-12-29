@@ -103,11 +103,11 @@ class Route
     public function needLogin()
     {
         if (!empty($_SESSION['id']) && $this->_needLogin === false) {
-            header('location: /espace-membre');
+            header('location: /member-area');
             exit();
         }
         elseif (empty($_SESSION['id']) && $this->_needLogin === true) {
-            header('location: /connexion');
+            header('location: /login');
             exit();
         }
     }
