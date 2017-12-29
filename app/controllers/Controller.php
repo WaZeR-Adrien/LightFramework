@@ -3,14 +3,14 @@ namespace Controllers;
 use Kernel\Config;
 use Kernel\Tools\Alert;
 use Kernel\Twig;
-use Models\Recruitment\Classe;
-use Models\Recruitment\Hero;
-use Models\Recruitment\Rank;
 
 class Controller
 {
     protected static $_datas = [];
     protected static $_alert = [];
+    protected static $_days = [
+        'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'
+    ];
 
     /**
      * Generate view
@@ -63,7 +63,7 @@ class Controller
             unset($_SESSION['alerts']);
         }
     }
-    
+
     /**
      * Remove attributes on array
      * @param array $array
@@ -91,22 +91,97 @@ class Controller
         return $array;
     }
 
+    /**
+     * Redirect towards url
+     * @param $url
+     */
     protected static function _redirect($url)
     {
         header('location: '. $url);
         exit();
     }
 
+    /**
+     * Create random token
+     * @return bool|string
+     */
     protected static function _createToken()
     {
         $token = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         return substr(str_shuffle(str_repeat($token, 50)), 0, 50);
     }
 
+    /**
+     * @param $var
+     */
     protected static function _toJson($var)
     {
         header('Content-Type:application/json');
         echo json_encode($var);
         exit();
+    }
+
+    /**
+     * Check if needle is between min and max values
+     * @param int $needle
+     * @param int $min
+     * @param int $max
+     * @return bool
+     */
+    protected static function _between($needle, $min = null, $max = null)
+    {
+        switch (true) {
+            // If null == $min && null == $max
+            case null == $min && null == $max:
+                return true;
+
+            // If needle == null && (null != $min || null != $max)
+            case null == $needle:
+                return false;
+
+            // If needle != null && (null != $min && null == $max)
+            case null != $min && null == $max:
+                return ($needle >= $min) ? true : false;
+
+            // If needle != null && (null == $min && null != $max)
+            case null == $min && null != $max:
+                return ($needle <= $max) ? true : false;
+
+            // If all var != null
+            default:
+                return ($needle >= $min && $needle <= $max) ? true : false;
+        }
+    }
+
+    /**
+     * Transform date Fr to Us
+     * @param $date
+     * @return string
+     */
+    protected static function _dateUs($date)
+    {
+        $tabDate = explode('/', $date);
+        return $tabDate[0] . '-' . $tabDate[1] . '-' . $tabDate[2];
+    }
+
+    /**
+     * Get the timestamp of the date
+     * @param $date
+     * @return int
+     */
+    protected static function _toTimestamp($date)
+    {
+        $newDate = new \DateTime($date);
+        return $newDate->getTimestamp();
+    }
+
+    /**
+     * @param $pattern
+     * @param $subject
+     * @return int
+     */
+    protected static function _match($pattern, $subject)
+    {
+        return preg_match(Config::getReg()[$pattern], $subject);
     }
 }
